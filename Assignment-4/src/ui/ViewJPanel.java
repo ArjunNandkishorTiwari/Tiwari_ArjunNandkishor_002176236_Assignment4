@@ -929,6 +929,12 @@ public class ViewJPanel extends javax.swing.JPanel {
             dummyRow[3] = patient.getVitalSign().getBpHigh();
             dummyRow[4] = patient.getVitalSign().getHeartRate();
             dummyRow[5] = patient.getVitalSign().getWeight();
+            boolean health = patient.isHealthy();
+            if(health == true){
+            dummyRow[6] = "Healthy";
+            }else{
+            dummyRow[6] = "Not Healthy";
+            } 
             TableModelPatient.addRow(dummyRow);
             
         
