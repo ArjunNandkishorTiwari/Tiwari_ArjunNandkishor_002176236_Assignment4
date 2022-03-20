@@ -266,6 +266,34 @@ public class CreateJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFirstNameActionPerformed
 
+    private boolean checkIfEmail(String str){
+         if(!str.contains("@")){
+             JOptionPane.showMessageDialog(this, "Please Enter @ in the email");
+             return false;
+         }
+          if(!str.contains(".")){
+             JOptionPane.showMessageDialog(this, "Please Enter . in the email");
+             return false;
+         }
+         
+                
+         return true;
+            
+            
+        }
+    
+    private void checkIfNumber(String str, String str1){
+        for(int i = 0; i < str.length(); i++){
+            int x = Integer.parseInt(String.valueOf(str.charAt(i))) ;
+                //JOptionPane.showMessageDialog(this, "Please Enter Numeric Value for "+str1);
+               
+                
+            
+            
+        }
+        
+    }
+    
     private void btnSavePersonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSavePersonActionPerformed
         // TODO add your handling code here:
         
@@ -280,51 +308,95 @@ public class CreateJPanel extends javax.swing.JPanel {
             String firstName = txtFirstName.getText();
             String lastName = txtLastName.getText();
             String email = txtEmail.getText();
-            int age = Integer.parseInt(txtAge.getText());
+            boolean emailStatus = checkIfEmail(email);
+            System.out.println(emailStatus);
+            if(emailStatus == false){
+                return;
+            }
+            
             String gender = genderComboBox.getSelectedItem().toString();
             String address = txtAddress.getText();
             String city = cityComboBox.getSelectedItem().toString();
             String community = communityComboBox.getSelectedItem().toString();
             String pinCode = txtPinCode.getText();
-            int houseNumber = Integer.parseInt(txtHouseNumber.getText());
-            String contact = txtContact.getText();
+             if (txtPinCode.getText().length() != 5 ){
+            JOptionPane.showMessageDialog(this, "Please Enter Correct length Value for Pincode");
+            return;
+        }
+//            int houseNumber = Integer.parseInt(txtHouseNumber.getText());
+//            String contact = txtContact.getText();
+//            int age = Integer.parseInt(txtAge.getText());
+//            int id = Integer.parseInt(txtPersonId.getText());
+//            txtHouseNumber.getText();
             
-            
-            
-                    
+
+
             try{
-                int id = Integer.parseInt(txtPersonId.getText());
-                boolean bool;
-                bool = personList.isUniquePersonId(id);
-                if(bool == false){
-                    JOptionPane.showMessageDialog(this, "Please enter unique Person Id");
-                    return;
-                } else{
-                    
-                    person.setPersonId(id);
-                
-                }
-            
-            } catch(NumberFormatException n){
-                JOptionPane.showMessageDialog(this, "Please enter numeric value for Person ID");
-                return ;
-            
-            }
-            
+//              pinCode = txtPinCode.getText();
+               checkIfNumber(pinCode,"Contact Number");
+              house.setPinCode(pinCode);
+             } catch(NumberFormatException e){
+              JOptionPane.showMessageDialog(this, "Please enter numeric value for Pincode");
+               return;
+             }
+
+            try{
+             int id = Integer.parseInt(txtPersonId.getText());
+              person.setPersonId(id);
+             } catch(NumberFormatException e){
+              JOptionPane.showMessageDialog(this, "Please enter numeric value for Id");
+               return;
+             }
+
+             try{
+             int houseNumber = Integer.parseInt(txtHouseNumber.getText());
+             house.setHouseNumber(houseNumber);
+             } catch(NumberFormatException e){
+              JOptionPane.showMessageDialog(this, "Please enter numeric value for House Number");
+               return;
+             }
+             
+             try{
+             int age = Integer.parseInt(txtAge.getText());
+             if (age <= 0 ){
+            JOptionPane.showMessageDialog(this, "Please Enter Correct Age");
+            return;
+        }
+              person.setAge(age);
+             } catch(NumberFormatException e){
+              JOptionPane.showMessageDialog(this, "Please enter numeric value for age");
+               return;
+             }
+             
+             try{
+             String contact = txtContact.getText();
+             if (txtContact.getText().length() != 10 ){
+            JOptionPane.showMessageDialog(this, "Please Enter Correct length Value for Contact Number");
+            return;
+        }
+             checkIfNumber(contact,"Contact Number");
+              person.setContactNumber(contact);
+             } catch(NumberFormatException e){
+              JOptionPane.showMessageDialog(this, "Please enter numeric value for Contact");
+               return;
+             }
+
+    
             person.setFirstName(firstName);
             person.setLastName(lastName);
-            person.setAge(age);
+//            person.setAge(age);
             person.setGender(gender);
             person.setEmail(email);
-            person.setContactNumber(contact);
+//            person.setContactNumber(contact);
+//            person.setPersonId(id);
             
             
             house.setAddress(address);
             house.setCity(city);
             house.setCommunity(community);
-            house.setHouseNumber(houseNumber);
-            house.setPinCode(pinCode);
-            
+           
+//            house.setPinCode(pinCode);
+//            house.setHouseNumber(houseNumber);
             person.setHomeAddress(house);
             
             personList.personList.add(person);

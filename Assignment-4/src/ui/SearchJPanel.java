@@ -5,6 +5,7 @@
 package ui;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.EncounterDirectory;
 import model.Patient;
@@ -25,6 +26,7 @@ public class SearchJPanel extends javax.swing.JPanel {
         initComponents();
         this.patientList = patientList;
         this.encounterList = encounterList;
+        displayAbnormalData();
     }
 
     /**
@@ -53,11 +55,11 @@ public class SearchJPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "PatientId", "First Name", "Last Name", "Gender", "Age", "Community", "City", "Encounter Time"
+                "PatientId", "First Name", "Last Name", "Gender", "Age", "Community", "City"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -73,7 +75,6 @@ public class SearchJPanel extends javax.swing.JPanel {
             tablePatientRecord.getColumnModel().getColumn(4).setResizable(false);
             tablePatientRecord.getColumnModel().getColumn(5).setResizable(false);
             tablePatientRecord.getColumnModel().getColumn(6).setResizable(false);
-            tablePatientRecord.getColumnModel().getColumn(7).setResizable(false);
         }
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -165,8 +166,8 @@ public class SearchJPanel extends javax.swing.JPanel {
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 897, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 897, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2))
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap(61, Short.MAX_VALUE))
         );
@@ -212,16 +213,29 @@ public class SearchJPanel extends javax.swing.JPanel {
             dummyRow[2] = patient.getVitalSign().getBpHigh();
             dummyRow[3] = patient.getVitalSign().getHeartRate();
             dummyRow[4] = patient.getVitalSign().getWeight();
+            boolean health = patient.isHealthy();
+            if(health == true){
+            dummyRow[5] = "Healthy";
+            }else{
+            dummyRow[5] = "Not Healthy";
+            }
             TableModelPatient.addRow(dummyRow);
     
     }
     }
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         // TODO add your handling code here:
-        ArrayList<Patient> tempList = new ArrayList<Patient>();
+        if (txtSearchLow.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Please provide Input");
+        
+        } else{
+            ArrayList<Patient> tempList = new ArrayList<Patient>();
         
         System.out.println("check 9");
-        if(searchComboBox.getSelectedItem().toString() == "ID"){
+        
+        try{
+        
+             if(searchComboBox.getSelectedItem().toString().equals("ID") ){
             System.out.println("check 10");
             int idSearch = Integer.parseInt(txtSearchLow.getText());
             
@@ -234,8 +248,13 @@ public class SearchJPanel extends javax.swing.JPanel {
             DisplayPatientData(tempList);
             
         }
+        } catch(NumberFormatException n){
         
-        if(searchComboBox.getSelectedItem().toString() == "Community"){
+            JOptionPane.showMessageDialog(this, "Please provide numerical Input");
+        }
+       
+        
+        if(searchComboBox.getSelectedItem().toString().equals("Community") ){
             System.out.println("check 11");
             String community = txtSearchLow.getText();
             
@@ -250,7 +269,7 @@ public class SearchJPanel extends javax.swing.JPanel {
         
         }
         
-        if(searchComboBox.getSelectedItem().toString() == "City"){
+        if(searchComboBox.getSelectedItem().toString().equals("City")){
             System.out.println("check 12");
             String city = txtSearchLow.getText();
             
@@ -268,7 +287,12 @@ public class SearchJPanel extends javax.swing.JPanel {
             
         }
         
-        if(searchComboBox.getSelectedItem().toString() == "Age"){
+        try{
+            if(searchComboBox.getSelectedItem().toString().equals("Age")){
+            if (txtSearchHigh.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Please provide Input");
+        
+        } else{
             System.out.println("check 9");
             int low = Integer.parseInt(txtSearchLow.getText());
             int high = Integer.parseInt(txtSearchHigh.getText());
@@ -282,6 +306,17 @@ public class SearchJPanel extends javax.swing.JPanel {
             DisplayPatientData(tempList);
         
         }
+        }
+        
+        } catch(NumberFormatException n){
+            JOptionPane.showMessageDialog(this, "Please provide numerical Input");
+        
+        }
+        
+        
+        
+        }
+        
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void searchComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchComboBoxActionPerformed
@@ -290,7 +325,30 @@ public class SearchJPanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_searchComboBoxActionPerformed
 
+    public void displayAbnormalData(){
+        DefaultTableModel TableModelPatient = (DefaultTableModel) tablePatientRecord.getModel();
+             TableModelPatient.setRowCount(0);
+//             System.out.print(patientList.getPatientList().size());
+             for(Patient patient : patientList.getPatientList()){
+                 if(patient.isHealthy() == false){
+                 
+                    Object[] dummyRow = new Object[7];
+                    dummyRow[0] = patient.getPatientId();
+                    dummyRow[1] = patient.getFirstName();
+                    dummyRow[2] = patient.getLastName();
+                    dummyRow[3] = patient.getGender();
+                    dummyRow[4] = patient.getAge();
+                    dummyRow[5] = patient.getHomeAddress().getCommunity();
+                    dummyRow[6] = patient.getHomeAddress().getCity();
+//                    dummyRow[3] = patient.getVitalSign().get;
+                    
+                    TableModelPatient.addRow(dummyRow);
+                 }
+           
     
+    }
+    
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSearch;

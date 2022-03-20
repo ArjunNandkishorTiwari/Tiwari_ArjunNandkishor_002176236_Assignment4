@@ -425,6 +425,36 @@ public class ViewJPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+     private boolean checkIfEmail(String str){
+         if(!str.contains("@")){
+             JOptionPane.showMessageDialog(this, "Please Enter @ in the email");
+             return false;
+         }
+          if(!str.contains(".")){
+             JOptionPane.showMessageDialog(this, "Please Enter . in the email");
+             return false;
+         }
+         
+                
+         return true;
+            
+            
+        }
+    
+    private void checkIfNumber(String str, String str1){
+        for(int i = 0; i < str.length(); i++){
+            int x = Integer.parseInt(String.valueOf(str.charAt(i))) ;
+                //JOptionPane.showMessageDialog(this, "Please Enter Numeric Value for "+str1);
+               
+                
+            
+            
+        }
+        
+    }
+    
+    
+    
     private void cityComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cityComboBoxActionPerformed
         // TODO add your handling code here:
         
@@ -547,40 +577,85 @@ public class ViewJPanel extends javax.swing.JPanel {
             String firstName = txtFirstName.getText();
             String lastName = txtLastName.getText();
             String email = txtEmail.getText();
-            int age = Integer.parseInt(txtAge.getText());
+//            int age = Integer.parseInt(txtAge.getText());
             String gender = genderComboBox.getSelectedItem().toString();
             String address = txtAddress.getText();
             String city = cityComboBox.getSelectedItem().toString();
             String community = communityComboBox.getSelectedItem().toString();
             String pinCode = txtPinCode.getText();
-            int houseNumber = Integer.parseInt(txtHouseNumber.getText());
+//            int houseNumber = Integer.parseInt(txtHouseNumber.getText());
             String contact = txtContact.getText();
             
             
+            if (txtPinCode.getText().length() != 5 ){
+            JOptionPane.showMessageDialog(this, "Please Enter Correct length Value for Pincode");
+            return;
+        }
+//            int houseNumber = Integer.parseInt(txtHouseNumber.getText());
+//            String contact = txtContact.getText();
+//            int age = Integer.parseInt(txtAge.getText());
+//            int id = Integer.parseInt(txtPersonId.getText());
+//            txtHouseNumber.getText();
             
-                    
+
+
+            try{
+//              pinCode = txtPinCode.getText();
+               checkIfNumber(pinCode,"Contact Number");
+               person.getHomeAddress().setPinCode(pinCode);
+             } catch(NumberFormatException e){
+              JOptionPane.showMessageDialog(this, "Please enter numeric value for Pincode");
+               return;
+             }
+
 //            try{
-//                int id = Integer.parseInt(txtPersonId.getText());
-//                boolean bool;
-//                bool = personList.isUniquePersonIdUpdate(id,selectedRowIndex);
-//                if(bool == false){
-//                    JOptionPane.showMessageDialog(this, "Please enter unique Person Id");
-//                    return;
-//                } else{
-//                    
-//                    person.setPersonId(id);
-//                
-//                }
-//            
-//            } catch(NumberFormatException n){
-//                JOptionPane.showMessageDialog(this, "Please enter numeric value for Person ID");
-//                return ;
-//            
-//            }
+//             int id = Integer.parseInt(txtPersonId.getText());
+//              person.setPersonId(id);
+//             } catch(NumberFormatException e){
+//              JOptionPane.showMessageDialog(this, "Please enter numeric value for Id");
+//               return;
+//             }
+
+             try{
+             int houseNumber = Integer.parseInt(txtHouseNumber.getText());
+             person.getHomeAddress().setHouseNumber(houseNumber);
+             } catch(NumberFormatException e){
+              JOptionPane.showMessageDialog(this, "Please enter numeric value for House Number");
+               return;
+             }
+             
+             try{
+             int age = Integer.parseInt(txtAge.getText());
+             if (age <= 0 ){
+            JOptionPane.showMessageDialog(this, "Please Enter Correct Age");
+            return;
+        }
+              person.setAge(age);
+             } catch(NumberFormatException e){
+              JOptionPane.showMessageDialog(this, "Please enter numeric value for age");
+               return;
+             }
+             
+             try{
+             contact = txtContact.getText();
+             if (txtContact.getText().length() != 10 ){
+            JOptionPane.showMessageDialog(this, "Please Enter Correct length Value for Contact Number");
+            return;
+        }
+             checkIfNumber(contact,"Contact Number");
+              person.setContactNumber(contact);
+             } catch(NumberFormatException e){
+              JOptionPane.showMessageDialog(this, "Please enter numeric value for Contact");
+               return;
+             }
+                    
+
+
+            
             
             person.setFirstName(firstName);
             person.setLastName(lastName);
-            person.setAge(age);
+//            person.setAge(age);
             person.setGender(gender);
             person.setEmail(email);
             person.setContactNumber(contact);
@@ -595,8 +670,8 @@ public class ViewJPanel extends javax.swing.JPanel {
             person.getHomeAddress().setAddress(address);
             person.getHomeAddress().setCity(city);
             person.getHomeAddress().setCommunity(community);
-            person.getHomeAddress().setHouseNumber(houseNumber);
-            person.getHomeAddress().setPinCode(pinCode);
+            
+//            person.getHomeAddress().setPinCode(pinCode);
 //            person.setHomeAddress(house);
             
 //            personList.personList.add(person);
@@ -623,14 +698,14 @@ public class ViewJPanel extends javax.swing.JPanel {
                 patientUpdated.setFirstName(firstName);
                 patientUpdated.setLastName(lastName);
                 patientUpdated.setPersonId(person.getPersonId());
-                patientUpdated.setAge(age);
+                patientUpdated.setAge(person.getAge());
                 patientUpdated.setContactNumber(contact);
                 patientUpdated.setEmail(email);
                 patientUpdated.setGender(gender);
                 patientUpdated.getHomeAddress().setAddress(address);
                 patientUpdated.getHomeAddress().setCity(city);
                 patientUpdated.getHomeAddress().setCommunity(community);
-                patientUpdated.getHomeAddress().setHouseNumber(houseNumber);
+                patientUpdated.getHomeAddress().setHouseNumber(person.getHomeAddress().getHouseNumber());
                 patientUpdated.getHomeAddress().setPinCode(pinCode);
                 
             
@@ -675,6 +750,16 @@ public class ViewJPanel extends javax.swing.JPanel {
         } else {
             
             Person person = personList.getPersonList().get(selectedRowIndex);
+            
+            try{
+            int lowBP = Integer.parseInt(txtLowBP.getText());
+            int highBP = Integer.parseInt(txtHighBP.getText());
+            int heartRate = Integer.parseInt(txtHeartRate.getText());
+            float weight = Float.parseFloat(txtWeight.getText());
+            }catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(this, "Please enter numeric value");
+               return;
+            }
         int lowBP = Integer.parseInt(txtLowBP.getText());
         int highBP = Integer.parseInt(txtHighBP.getText());
         int heartRate = Integer.parseInt(txtHeartRate.getText());
@@ -726,7 +811,7 @@ public class ViewJPanel extends javax.swing.JPanel {
         encounter.setEncounterTime(LocalDateTime.now());
         encounter.setPatientId(patientNew.getPatientId());
         encounter.setVitalSign(vitalSign);
-        encounter.setIsPatientHealthy(true);
+        encounter.setIsPatientHealthy(patientNew.isHealthy());
         encounterList.getEncounterList().add(encounter);
         
             
